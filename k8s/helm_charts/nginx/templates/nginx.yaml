@@ -9,6 +9,10 @@ spec:
       labels:
         tag: {{ .Values.nginx.name }}
     spec:
+      initContainers:
+        - name: update-index
+          image: google/cloud-sdk
+          command: ['sh', '-c', "gsutil cp gs://ae_hiring_files/index.html /usr/share/nginx/html/index.html"]
       containers:
         - name: nginx
           image: {{ .Values.nginx.image | quote }}
