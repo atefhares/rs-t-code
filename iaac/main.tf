@@ -116,10 +116,10 @@ resource "helm_release" "nginx-helm-release" {
   name       = "nginx-chart"
   chart      = "./k8s/helm_charts/nginx"
   
-  set {
-    name  = "cloud_armor_policy_name"
-    value = "${google_compute_security_policy.policy.name}"
-  }
+  # set {
+  #   name  = "cloud_armor_policy_name"
+  #   value = "${google_compute_security_policy.policy.name}"
+  # }
 
   set {
     name  = "external_ip_address"
