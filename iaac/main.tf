@@ -45,7 +45,7 @@ module "gke_auto" {
   vpc                        = module.gke_network.vpc_id
   subnet                     = module.gke_network.subnet_name
   gke_master_ipv4_cidr_block = "172.23.0.0/28"
-  authorized_source_ranges   = ["0.0.0.0/0"] # !!!!!!!!!! FOR TESTING ONLY !!!!!!!!!
+  authorized_source_ranges   = [var.gke_authorized_source_ranges] 
   pods_cidr                  = "app-pods-cidr"
   services_cidr              = "app-services-cidr"
 
