@@ -63,6 +63,37 @@ resource "google_project_service" "container-api" {
 
 # ---------------------------------------------------------------------------
 
+resource "google_compute_security_policy" "policy" {
+  name = "only-allow-authrozised-users"
+
+  rule {
+    action   = "allow"
+    priority = "1000"
+    match {
+      versioned_expr = "SRC_IPS_V1"
+      config {
+        src_ip_ranges = ["${var.gke_authorized_source_ranges}"]
+      }
+    }
+    description = "allow only access from this CIDR"
+  }
+
+  rule {
+    action   = "deny(403)"
+    priority = "2147483647"
+    match {
+      versioned_expr = "SRC_IPS_V1"
+      config {
+        src_ip_ranges = ["*"]
+      }
+    }
+    description = "Deny access from internet"
+  }
+}
+
+
+# ---------------------------------------------------------------------------
+
 # Deploying the nginx chart with helm provider
 
 resource "null_resource" "get_cluster_cred" {
@@ -77,8 +108,12 @@ resource "helm_release" "nginx-helm-release" {
   name       = "nginx-chart"
   chart      = "./k8s/helm_charts/nginx"
   
-  
-  depends_on = [null_resource.get_cluster_cred]
+  set {
+    name  = "cloud_armor_policy_name"
+    value = "${google_compute_security_policy.policy.name}"
+  }
+
+  depends_on = [null_resource.get_cluster_cred, google_compute_security_policy.policy]
 }
 
 # ---------------------------------------------------------------------------
