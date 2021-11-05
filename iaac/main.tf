@@ -70,7 +70,7 @@ resource "google_project_service" "container-api" {
 # Deploying the nginx chart with helm provider
 resource "helm_release" "nginx-helm-release" {
   name       = "nginx-chart"
-  chart      = "../k8s/helm_charts/nginx"
+  chart      = "./k8s/helm_charts/nginx"
   
   
   depends_on = [module.gke_auto]
