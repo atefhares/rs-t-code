@@ -48,20 +48,6 @@ module "gke_auto" {
 }
 
 # ---------------------------------------------------------------------------
-#  enable all required apis 
-
-resource "google_project_service" "compute-api" {
-  project = var.project_id
-  service = "compute.googleapis.com"
-}
-
-resource "google_project_service" "container-api" {
-  project = var.project_id
-  service = "container.googleapis.com"
-}
-
-
-# ---------------------------------------------------------------------------
 
 # to be used by nginx chart to protect the access.
 
@@ -197,4 +183,18 @@ resource "google_monitoring_alert_policy" "nginx_down_uptime_check_failure_alert
   enabled               = "true"
   notification_channels = [google_monitoring_notification_channel.email.id] # this will send an email
   project               = var.project_id
+}
+
+
+# ---------------------------------------------------------------------------
+#  enable all required apis 
+
+resource "google_project_service" "compute-api" {
+  project = var.project_id
+  service = "compute.googleapis.com"
+}
+
+resource "google_project_service" "container-api" {
+  project = var.project_id
+  service = "container.googleapis.com"
 }
