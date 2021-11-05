@@ -63,7 +63,7 @@ resource "google_project_service" "container-api" {
 
 # ---------------------------------------------------------------------------
 
-# to be used by nginx chart to protect the access. [missing permissions]
+# to be used by nginx chart to protect the access.
 
 resource "google_compute_security_policy" "policy" {
   name = "only-allow-authrozised-users"
@@ -131,7 +131,7 @@ resource "helm_release" "nginx-helm-release" {
 }
 
 # ---------------------------------------------------------------------------
-# Monitor the nginx with an up-time check [missing permissions]
+# Monitor the nginx with an up-time check
 
 resource "google_monitoring_uptime_check_config" "nginx_down_uptime_check" {
   display_name = "nginx_down_uptime_check"
