@@ -1,5 +1,9 @@
 # rs-t-code
 
+## What is built here
+1. ``` iaac ``` dir contains all terraform code required to build a gke cluster and deploy nginx.
+2. ``` k8s ``` dir contains a helm chart for nginx deployment.
+
 ## Prerequisites
 1. install terraform [v0.13+].
 2. instal gcloud sdk [277.0.0+].
@@ -31,7 +35,6 @@ terraform apply \
 -var project_id=$PROJECT_ID \
 -var gke_authorized_source_ranges=$GKE_AUTHORIZED_CIDR \
 -var region=$REGION \
--var zone=$ZONE \
 iaac/
 ```
 
@@ -47,3 +50,7 @@ note: HPA config is set to 5% cpu untilization for testing purpose only.
     ```
     watch -n 2 "kubectl get hpa"
     ```
+
+## Future work
+1. enable IAP protection for nginx access (if required).
+2. make the gke cluster private and deploy a minimal bastion vm that allows only ssh-tunneling to be used for connections to the cluster.
