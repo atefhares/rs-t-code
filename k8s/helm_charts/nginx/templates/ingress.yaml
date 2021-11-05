@@ -5,7 +5,7 @@ kind: Ingress
 metadata:
   name: "nginx-ingress"
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: {{ .Values.external_ip_address }}
+    kubernetes.io/ingress.global-static-ip-name: {{ .Values.external_ip_address | quote }}
     kubernetes.io/ingress.allow-http: "true" ####### TESTING ONLY ######
 spec:
   rules:

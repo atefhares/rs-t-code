@@ -9,3 +9,7 @@ variable "gke_authorized_source_ranges" {
 variable "region" {
   type = string
 }
+
+variable "notifications_email" {
+  type = string
+}
