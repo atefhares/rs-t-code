@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  template:
+    metadata:
+      labels:
+        tag: {{ .Values.nginx.name }}
+    spec:
+      containers:
+        - name: nginx
+          image: {{ .Values.nginx.image | quote }}
+          ports:
+            - containerPort: {{ .Values.nginx.port }}
+
+  replicas: {{ .Values.nginx.replicas }}
+  selector:
+    matchLabels:
+      tag: {{ .Values.nginx.name }}
+
+# --------------------------------
+
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  type: NodePort
+  ports:
+    - port: {{ .Values.nginx.port }}
+  selector:
+    tag: {{ .Values.nginx.name }}

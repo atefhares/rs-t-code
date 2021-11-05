@@ -1,0 +1,20 @@
+#using defualt ingress class [on GCP default class is GCE ingress]
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "nginx-ingress"
+  annotations:
+    kubernetes.io/ingress.allow-http: "true" ####### TESTING ONLY ######
+spec:
+  rules:
+  - host:
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        path: /*
+        backend:
+          service:
+            name: "nginx-service"
+            port: 
+              number: {{ .Values.nginx.port }}
