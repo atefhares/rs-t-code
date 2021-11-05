@@ -51,8 +51,3 @@ spec:
   securityPolicy:
     name: {{ quote .Values.cloud_armor_policy_name }}
   timeoutSec: 1800
-  # For better security, IAP should be configured
-  # iap:
-  #   enabled: {{ .Values.iap.enable_iap }}
-  #   oauthclientCredentials:
-  #     secretName: {{ .Values.iap.oauth_client_credentials_k8s_secret_name }}
