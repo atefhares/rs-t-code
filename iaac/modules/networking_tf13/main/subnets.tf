@@ -1,4 +1,4 @@
-resource "google_compute_subnetwork" "safe_subnet" {
+resource "google_compute_subnetwork" "trusted_subnet" {
   name          = var.subnet_name
   ip_cidr_range = var.subnet_cidr
   region        = var.region
