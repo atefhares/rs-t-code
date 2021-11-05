@@ -15,6 +15,12 @@ provider "google" {
   region      = local.region
 }
 
+provider "helm" {
+  kubernetes {
+    config_path = "~/.kube/config"
+  }
+}
+
 # -------------------------------------------------------------------------
 module "gke_network" {
   source              = "./modules/networking_tf13/main"
@@ -71,4 +77,11 @@ resource "google_project_service" "container-api" {
   project = var.project_id
   service = "container.googleapis.com"
 }
+
+
 #  =========================================================================
+# Deploying the nginx chart with helm provider
+resource "helm_release" "example" {
+  name       = "nginx-chart"
+  chart      = "../rs/k8s/helm_charts/nginx"
+}
