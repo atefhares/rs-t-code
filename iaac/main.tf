@@ -5,7 +5,7 @@ locals {
 
 terraform {
   backend "gcs" {
-    bucket  = "tfstate-bucket-atefhares-dPgtsaw1v"
+    bucket  = "tfstate-bucket-atefhares-dgtsaw1v"
     prefix  = "terraform/state"
   }
 }
