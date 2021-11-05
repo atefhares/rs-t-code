@@ -1,8 +1,3 @@
-locals {
-  region        = "europe-west2"
-  zone          = "europe-west2-b"
-}
-
 terraform {
   backend "gcs" {
     bucket  = "tfstate-bucket-atefhares-dgtsaw1v"
@@ -12,7 +7,7 @@ terraform {
 
 provider "google" {
   project     = var.project_id
-  region      = local.region
+  region      = var.region
 }
 
 provider "helm" {
@@ -24,7 +19,7 @@ provider "helm" {
 # -------------------------------------------------------------------------
 module "gke_network" {
   source              = "./modules/networking_tf13/main"
-  region              = local.region
+  region              = var.region
   vpc_name            = "gke-network"
   subnet_name         = "safe-subnet"
   subnet_cidr         = "20.0.0.0/16"
@@ -41,7 +36,7 @@ module "gke_network" {
 # -------------------------------------------------------------------------
 module "gke_auto" {
   source                     = "./modules/gke_auto_pilot_tf13/main"
-  region                     = local.region
+  region                     = var.region
   vpc                        = module.gke_network.vpc_id
   subnet                     = module.gke_network.subnet_name
   gke_master_ipv4_cidr_block = "172.23.0.0/28"
@@ -66,12 +61,13 @@ resource "google_project_service" "container-api" {
 }
 
 
-#  =========================================================================
+# ---------------------------------------------------------------------------
+
 # Deploying the nginx chart with helm provider
 
 resource "null_resource" "get_cluster_cred" {
   provisioner "local-exec" {
-    command = "gcloud container clusters get-credentials ${module.gke_auto.cluster_name} --region ${local.region} --project ${var.project_id}"
+    command = "gcloud container clusters get-credentials ${module.gke_auto.cluster_name} --region ${var.region} --project ${var.project_id}"
   }
 
   depends_on = [module.gke_auto]
@@ -84,3 +80,5 @@ resource "helm_release" "nginx-helm-release" {
   
   depends_on = [null_resource.get_cluster_cred]
 }
+
+# ---------------------------------------------------------------------------

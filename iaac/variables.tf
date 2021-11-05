@@ -5,3 +5,7 @@ variable "project_id" {
 variable "gke_authorized_source_ranges" {
   type = string
 }
+
+variable "region" {
+  type = string
+}
