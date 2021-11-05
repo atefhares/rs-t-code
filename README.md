@@ -13,8 +13,9 @@
     ```
     gcloud config set project [REPLACE_WITH_PROJECT_ID]
     ```
-6. clone this repo.
-7. `cd` the repo dir and run the following:
+6. Make sure to maunally create the state file GCS bucket first (name is hard-coded in the main.tf)
+7. clone this repo.
+8. `cd` the repo dir and run the following:
     ```
     terraform init iaac/
     ```
