@@ -1,4 +1,4 @@
-resource "google_container_cluster" "private" {
+resource "google_container_cluster" "auto-gke" {
   name                     = "trusted-app-cluster-autopilot"
   location                 = var.region
 
