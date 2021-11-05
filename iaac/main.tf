@@ -63,36 +63,42 @@ resource "google_project_service" "container-api" {
 
 # ---------------------------------------------------------------------------
 
-# to be used by nginx chart to protect the access.
+# to be used by nginx chart to protect the access. [missing permissions]
 
-resource "google_compute_security_policy" "policy" {
-  name = "only-allow-authrozised-users"
+# resource "google_compute_security_policy" "policy" {
+#   name = "only-allow-authrozised-users"
 
-  rule {
-    action   = "allow"
-    priority = "1000"
-    match {
-      versioned_expr = "SRC_IPS_V1"
-      config {
-        src_ip_ranges = ["${var.gke_authorized_source_ranges}"]
-      }
-    }
-    description = "allow only access from this CIDR"
-  }
+#   rule {
+#     action   = "allow"
+#     priority = "1000"
+#     match {
+#       versioned_expr = "SRC_IPS_V1"
+#       config {
+#         src_ip_ranges = ["${var.gke_authorized_source_ranges}"]
+#       }
+#     }
+#     description = "allow only access from this CIDR"
+#   }
 
-  rule {
-    action   = "deny(403)"
-    priority = "2147483647"
-    match {
-      versioned_expr = "SRC_IPS_V1"
-      config {
-        src_ip_ranges = ["*"]
-      }
-    }
-    description = "Deny access from internet"
-  }
+#   rule {
+#     action   = "deny(403)"
+#     priority = "2147483647"
+#     match {
+#       versioned_expr = "SRC_IPS_V1"
+#       config {
+#         src_ip_ranges = ["*"]
+#       }
+#     }
+#     description = "Deny access from internet"
+#   }
+# }
+
+
+# ---------------------------------------------------------------------------
+
+resource "google_compute_global_address" "nginx-address" {
+  name = "global-nginx-ip"
 }
-
 
 # ---------------------------------------------------------------------------
 
@@ -115,7 +121,71 @@ resource "helm_release" "nginx-helm-release" {
     value = "${google_compute_security_policy.policy.name}"
   }
 
-  depends_on = [null_resource.get_cluster_cred, google_compute_security_policy.policy]
+  set {
+    name  = "external_ip_address"
+    value = "${google_compute_global_address.nginx-address.name}"
+  }
+
+  depends_on = [null_resource.get_cluster_cred, google_compute_global_address.nginx-address]
 }
 
 # ---------------------------------------------------------------------------
+# TODO: monitor the nginx with an up-time check [missing permissions]
+
+# resource "google_monitoring_uptime_check_config" "app_down_uptime_check" {
+#   display_name = "app_down_uptime_check"
+
+#   http_check {
+#     mask_headers   = "false"
+#     path           = "/"
+#     port           = "80"
+#     request_method = "GET"
+#     use_ssl        = "false"
+#     validate_ssl   = "false"
+#   }
+
+#   monitored_resource {
+#     labels = {
+#       host       = "34.149.215.9" # used ip cuz there is no DNS record
+#       project_id = var.project_id
+#     }
+
+#     type = "uptime_url"
+#   }
+
+#   period  = "60s"
+#   project = var.project_id
+#   timeout = "10s"
+# }
+
+# resource "google_monitoring_alert_policy" "app_down_uptime_check_failure_alert" {
+#   combiner = "OR"
+
+#   conditions {
+#     condition_threshold {
+#       aggregations {
+#         alignment_period     = "60s"
+#         cross_series_reducer = "REDUCE_COUNT_FALSE"
+#         group_by_fields      = ["resource.label.*"]
+#         per_series_aligner   = "ALIGN_NEXT_OLDER"
+#       }
+
+#       comparison      = "COMPARISON_GT"
+#       duration        = "300s"
+#       filter          = "metric.type=\"monitoring.googleapis.com/uptime_check/check_passed\" resource.type=\"uptime_url\" metric.label.\"check_id\"=\"${google_monitoring_uptime_check_config.app_down_uptime_check.display_name}\""
+#       threshold_value = "1"
+
+#       trigger {
+#         count   = "1"
+#         percent = "0"
+#       }
+#     }
+
+#     display_name = "Failure of uptime check_id ${google_monitoring_uptime_check_config.app_down_uptime_check.display_name}"
+#   }
+
+#   display_name          = "${google_monitoring_uptime_check_config.app_down_uptime_check.display_name} failure"
+#   enabled               = "true"
+#   notification_channels = ["projects/${var.project_id}/notificationChannels/7213054574481980508"] # this will send an email
+#   project               = var.project_id
+# }

@@ -10,3 +10,4 @@ nginx:
   port: 80
 
 cloud_armor_policy_name:
+external_ip_address:
