@@ -68,10 +68,19 @@ resource "google_project_service" "container-api" {
 
 #  =========================================================================
 # Deploying the nginx chart with helm provider
+
+resource "null_resource" "get_cluster_cred" {
+  provisioner "local-exec" {
+    command = "gcloud gcloud container clusters get-credentials ${module.gke_auto.cluster_name} --region ${local.region} --project ${var.project_id}"
+  }
+
+  depends_on = [module.gke_auto]
+}
+
 resource "helm_release" "nginx-helm-release" {
   name       = "nginx-chart"
   chart      = "./k8s/helm_charts/nginx"
   
   
-  depends_on = [module.gke_auto]
+  depends_on = [null_resource.get_cluster_cred]
 }
