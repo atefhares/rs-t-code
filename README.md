@@ -1,6 +1,6 @@
 # rs-t-code
 
-## Prerequisites:
+## Prerequisites
 1. install terraform [v0.13+].
 2. instal gcloud sdk [277.0.0+].
 3. install helm binary [v3.2.0+].
@@ -20,7 +20,7 @@
     terraform init iaac/
     ```
 
-## How to apply the code:-
+## How to apply the code
 While on repo dir path, run the following script and replace values **without** adding quotes.
 ```
 export PROJECT_ID=[REPLACE_WITH_PROJECT_ID]
@@ -34,3 +34,16 @@ terraform apply \
 -var zone=$ZONE \
 iaac/
 ```
+
+## How to test AutoScalling
+note: HPA config is set to 5% cpu untilization for testing purpose only.
+
+1. Use this simple load-testing tool [hey](https://github.com/rakyll/hey):
+    
+    ```
+    ./hey_linux_amd64 -c 50 -n 1000000 INGRESS_URL
+    ```
+2. in another shell, watch the HPA status
+    ```
+    watch -n 2 "kubectl get hpa"
+    ```
