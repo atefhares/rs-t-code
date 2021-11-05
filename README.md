@@ -13,6 +13,8 @@
     gcloud auth login
     gcloud auth application-default login
     ```
+    note: make sure you have all required IAM permissions to provision the resources created by the code.
+
 5. set default project to YOU_PROJECT_ID
     ```
     gcloud config set project [REPLACE_WITH_PROJECT_ID]
@@ -38,11 +40,13 @@ terraform apply \
 iaac/
 ```
 
+## How to view nginx index page
+simply, once deployment is compleleted -> in the gke services dashboard, you should see the created ingress with a random public ip address, use this ip address in your browser window as follows: http://IP_ADD/
+
 ## How to test AutoScalling
 note: HPA config is set to 5% cpu untilization for testing purpose only.
 
 1. Use this simple load-testing tool [hey](https://github.com/rakyll/hey):
-    
     ```
     ./hey_linux_amd64 -c 50 -n 1000000 INGRESS_URL
     ```
@@ -54,3 +58,5 @@ note: HPA config is set to 5% cpu untilization for testing purpose only.
 ## Future work
 1. enable IAP protection for nginx access (if required).
 2. make the gke cluster private and deploy a minimal bastion vm that allows only ssh-tunneling to be used for connections to the cluster.
+3. enable HTTPS for the nginx endpoint.
+4. apply PSPs to add more protection to the gke cluster.
