@@ -9,4 +9,4 @@ spec:
     name: nginx-deployment
   minReplicas: 1
   maxReplicas: 10
-  targetCPUUtilizationPercentage: 5 # for testing only
+  targetCPUUtilizationPercentage: 50

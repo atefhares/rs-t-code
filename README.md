@@ -44,11 +44,12 @@ iaac/
 simply, once deployment is compleleted -> in the gke services dashboard, you should see the created ingress with a random public ip address, use this ip address in your browser window as follows: http://IP_ADD/
 
 ## How to test AutoScalling
-note: HPA config is set to 5% cpu untilization for testing purpose only.
 
-1. Use this simple load-testing tool [hey](https://github.com/rakyll/hey):
+1. In the HPA config set cpu untilization value to 1% and re-deploy.
+
+2. Use this simple load-testing tool [hey](https://github.com/rakyll/hey):
     ```
-    ./hey_linux_amd64 -c 50 -n 1000000 INGRESS_URL
+    ./hey_linux_amd64 -c 80 -n 1000000 INGRESS_URL
     ```
 2. in another shell, watch the HPA status
     ```
