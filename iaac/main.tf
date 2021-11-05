@@ -63,6 +63,8 @@ resource "google_project_service" "container-api" {
 
 # ---------------------------------------------------------------------------
 
+# to be used by nginx chart to protect the access.
+
 resource "google_compute_security_policy" "policy" {
   name = "only-allow-authrozised-users"
 
