@@ -57,7 +57,8 @@ simply, once deployment is compleleted -> in the gke services dashboard, you sho
     ```
 
 ## Future work
-1. enable IAP protection for nginx access (if required).
-2. make the gke cluster private and deploy a minimal bastion vm that allows only ssh-tunneling to be used for connections to the cluster.
-3. enable HTTPS for the nginx endpoint.
-4. apply PSPs to add more protection to the gke cluster.
+1. Enable IAP protection for nginx access (if required).
+2. Make the gke cluster private and deploy a minimal bastion vm that allows only ssh-tunneling to be used for connections to the cluster.
+3. Enable HTTPS for the nginx endpoint.
+4. Apply PSPs to add more protection to the gke cluster.
+5. Modifiy the way that the cluster uses to accesses internet to only allow specfic urls or domains.
