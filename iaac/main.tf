@@ -56,9 +56,10 @@ module "gke_auto" {
 
 
 # ---------------------------------------------------------------------------
-#  TODO: enable all required apis 
-#  Cloud Resource Manager API
-#  Google Kubernetes Engine API
-#  Cloud Storage API
+#  enable all required apis 
 
+resource "google_project_service" "project" {
+  project = "your-project-id"
+  service = "compute.googleapis.com"
+}
 #  =========================================================================
