@@ -52,19 +52,6 @@ module "gke_auto" {
   depends_on          = [module.gke_network, google_project_service.container-api]
 }
 
-# module "gke_standard" {
-#   source                     = "./modules/gke_standard_tf13/main"
-#   region                     = local.region
-#   vpc                        = module.gke_network.vpc_id
-#   subnet                     = module.gke_network.subnet_name
-#   gke_master_ipv4_cidr_block = "172.23.0.0/28"
-#   authorized_source_ranges   = ["0.0.0.0/0"]
-#   pods_cidr                  = "app-pods-cidr"
-#   services_cidr              = "app-services-cidr"
-# }
-# -------------------------------------------------------------------------
-
-
 # ---------------------------------------------------------------------------
 #  enable all required apis 
 
@@ -83,7 +70,7 @@ resource "google_project_service" "container-api" {
 # Deploying the nginx chart with helm provider
 resource "helm_release" "nginx-helm-release" {
   name       = "nginx-chart"
-  chart      = "../rs/k8s/helm_charts/nginx"
+  chart      = "../k8s/helm_charts/nginx"
   
   
   depends_on = [module.gke_auto]
