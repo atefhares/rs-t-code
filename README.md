@@ -4,6 +4,15 @@
 1. ``` iaac ``` dir contains all terraform code required to build a gke cluster and deploy nginx.
 2. ``` k8s ``` dir contains a helm chart for nginx deployment.
 
+## Recources created
+- VPC with a safe Subnet that has a NAT GW.
+- An auto-pilot GKE cluster to deploy Nginx.
+- Nginx is deployed by helm manged by terraform helm provider.
+- HPA for nginx by CPU utilization.
+- A public golobal ip address used with nginx ingress.
+- A Cloud Armor securoty policy to protect nginx access.
+- An Up-Time check for the public ingress endpoint of nginx that will send an email in case nginx is down.
+
 ## Prerequisites
 1. install terraform [v0.13+].
 2. instal gcloud sdk [277.0.0+].
