@@ -71,7 +71,7 @@ resource "google_project_service" "container-api" {
 
 resource "null_resource" "get_cluster_cred" {
   provisioner "local-exec" {
-    command = "gcloud gcloud container clusters get-credentials ${module.gke_auto.cluster_name} --region ${local.region} --project ${var.project_id}"
+    command = "gcloud container clusters get-credentials ${module.gke_auto.cluster_name} --region ${local.region} --project ${var.project_id}"
   }
 
   depends_on = [module.gke_auto]
