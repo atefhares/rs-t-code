@@ -59,7 +59,7 @@ module "gke_auto" {
 #  enable all required apis 
 
 resource "google_project_service" "project" {
-  project = "your-project-id"
+  project = var.project_id
   service = "compute.googleapis.com"
 }
 #  =========================================================================
