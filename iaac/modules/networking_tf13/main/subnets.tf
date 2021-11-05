@@ -1,8 +1,9 @@
 resource "google_compute_subnetwork" "trusted_subnet" {
-  name          = var.subnet_name
-  ip_cidr_range = var.subnet_cidr
-  region        = var.region
-  network       = google_compute_network.vpc_network.id
+  name                       = var.subnet_name
+  ip_cidr_range              = var.subnet_cidr
+  region                     = var.region
+  network                    = google_compute_network.vpc_network.id
+  private_ip_google_access   = true
   
   dynamic "secondary_ip_range" {
     for_each      = lookup(var.secondary_ip_ranges, var.subnet_name)
