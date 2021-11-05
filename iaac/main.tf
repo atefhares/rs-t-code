@@ -28,6 +28,8 @@ module "gke_network" {
       { name: "app-pods-cidr", cidr: "20.2.20.0/24" },
     ],
   }
+
+  depends_on          = [google_project_service.compute-api]
 }
 
 # -------------------------------------------------------------------------
@@ -40,6 +42,8 @@ module "gke_auto" {
   authorized_source_ranges   = ["0.0.0.0/0"] # !!!!!!!!!! FOR TESTING ONLY !!!!!!!!!
   pods_cidr                  = "app-pods-cidr"
   services_cidr              = "app-services-cidr"
+
+  depends_on          = [module.gke_network, google_project_service.container-api]
 }
 
 # module "gke_standard" {
@@ -58,8 +62,13 @@ module "gke_auto" {
 # ---------------------------------------------------------------------------
 #  enable all required apis 
 
-resource "google_project_service" "project" {
+resource "google_project_service" "compute-api" {
   project = var.project_id
   service = "compute.googleapis.com"
+}
+
+resource "google_project_service" "container-api" {
+  project = var.project_id
+  service = "container.googleapis.com"
 }
 #  =========================================================================
