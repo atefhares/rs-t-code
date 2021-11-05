@@ -1,7 +1,7 @@
 resource "google_compute_router" "nat-router" {
   name    = "nat-router"
-  region  = google_compute_subnetwork.subnet.region
-  network = google_compute_network.net.id
+  region  = google_compute_subnetwork.safe_subnet.region
+  network = google_compute_network.vpc_network.id
 
   bgp {
     asn = 64514
